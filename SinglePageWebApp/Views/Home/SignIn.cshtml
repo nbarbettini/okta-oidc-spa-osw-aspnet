@@ -15,9 +15,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/1.8.0/js/okta-sign-in.min.js" type="text/javascript"></script>
-<link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/1.8.0/css/okta-sign-in.min.css" type="text/css" rel="stylesheet">
-<link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/1.8.0/css/okta-theme.css" type="text/css" rel="stylesheet">
+<script src="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/1.9.0/js/okta-sign-in.min.js" type="text/javascript"></script>
+<link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/1.9.0/css/okta-sign-in.min.css" type="text/css" rel="stylesheet">
+<link href="https://ok1static.oktacdn.com/assets/js/sdk/okta-signin-widget/1.9.0/css/okta-theme.css" type="text/css" rel="stylesheet">
 
 
 <style>
@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="col-sm-6 col-md-6">
-                    <div class="signup">
+                    <div style="visibility:hidden" class="signup">
                         <form>
                             <fieldset>
                                 <div class="social_sign">
@@ -123,7 +123,7 @@
             authParams: {
                 responseType: 'id_token',
                 responseMode: 'okta_post_message',
-                scope: ['openid', 'profile', 'email', 'address', 'phone', 'groups'],
+                scopes: ['openid', 'profile', 'email', 'address', 'phone', 'groups'],
             },
             features: {
                 rememberMe: true,
@@ -138,13 +138,31 @@
                  { text: 'custom link text 2', href: 'http://acme.com/custom/link2' }
                 ]
             },
-            labels: {
-                'primaryauth.title': 'Acme Partners Sign In',
-                'primaryauth.submit': 'Partner Sign In',
-                'primaryauth.username.placeholder': 'Partner ID',
-                'primaryauth.username.tooltip': 'Enter your partner.com ID',
-                'primaryauth.password.placeholder': 'Password',
-                'primaryauth.password.tooltip': 'Super secret password'
+            language: 'en',
+            i18n: {
+                // Overriding English labels
+                en: {
+                    'primaryauth.title': 'Acme Partners Sign In',
+                    'primaryauth.submit': 'Partner Sign In',
+                    'primaryauth.username.placeholder': 'Partner ID',
+                    'primaryauth.username.tooltip': 'Enter your partner.com ID',
+                    'primaryauth.password.placeholder': 'Password',
+                    'primaryauth.password.tooltip': 'Super secret password'
+                },
+                // Overriding French labels
+                fr: {
+                    'primaryauth.title': 'Connexion Partenaires Acme',
+                    'primaryauth.submit': 'Connexion Partenaire',
+                    'primaryauth.username.placeholder': 'ID Partenaire',
+                    'primaryauth.username.tooltip': 'Entrez votre ID partenaire.com',
+                    'primaryauth.password.placeholder': 'Mot de passe',
+                    'primaryauth.password.tooltip': 'Mot de passe super secret'
+                },
+                // Overriding Japanese properties
+                ja: {
+                    'primaryauth.title': 'ACMEにサインイン',
+                    'primaryauth.username.placeholder': 'ACMEのユーザー名'
+                }
             }
         });
     };

@@ -27,8 +27,8 @@ function renderOktaWidget() {
                     if (res.status === 'SUCCESS') {
                         console.log(res);
                         var id_token = res.idToken;
-                        console.log('id token: ' + id_token);
-                        sessionStorage.setItem(idTokenKey, id_token);
+                        //storing the whole response (including the idToken, the claims, the scopes, the expiresAt and the authorizeUrl
+                        oktaSignIn.tokenManager.add(idTokenKey, res);
                         sessionStorage.setItem(userLoginKey, res.claims.preferred_username);
                         showAuthUI(true, res.claims.preferred_username);
                     }
@@ -37,7 +37,7 @@ function renderOktaWidget() {
             );
         }
         else {
-            var id_token = sessionStorage.getItem(idTokenKey);
+            var id_token = oktaSignIn.tokenManager.get(idTokenKey);
             if (id_token == null) {
                 console.log('calling renewToken');
                 callRenewToken();
@@ -46,7 +46,6 @@ function renderOktaWidget() {
             if (userLogin) {
                 console.log('user Login is ' + userLogin);
             }
-
             showAuthUI(true, userLogin);
         }
     });
@@ -98,7 +97,7 @@ function callSecureWebApi() {
         dataType: 'json',
         url: webApiRootUrl + "/protected",
         beforeSend: function (xhr) {
-            var id_token = sessionStorage.getItem(idTokenKey);
+            var id_token = oktaSignIn.tokenManager.get(idTokenKey).idToken;
             console.log("callSecureWebApi ID Token: " + id_token);
             if (id_token) {
                 xhr.setRequestHeader("Authorization", "Bearer " + id_token);
@@ -120,7 +119,7 @@ function callUserInfo() {
         dataType: 'json',
         url: oktaOrgUrl + "/oauth2/v1/userinfo",
         beforeSend: function (xhr) {
-            var id_token = sessionStorage.getItem(idTokenKey);
+            var id_token = oktaSignIn.tokenManager.get(idTokenKey).idToken;
             if (id_token) {
                 xhr.setRequestHeader("Authorization", "Bearer " + id_token);
             }
@@ -233,10 +232,9 @@ function closeSession(callback) {
 }
 
 function callRenewToken() {
-    oktaSignIn.idToken.refresh(null, function (token) {
-        console.log('New ID token: ', token);
-        sessionStorage.setItem(idTokenKey, token);
-        sessionStorage.setItem(userLoginKey, token.claims.preferred_username);
-        return token;
+    var id_token = oktaSignIn.tokenManager.get(idTokenKey);
+    console.log('Current ID token: ' + id_token.idToken);
+    oktaSignIn.tokenManager.refresh(idTokenKey).then(function (newToken) {
+        console.log('New ID token: ' + newToken.idToken);
     });
 }
