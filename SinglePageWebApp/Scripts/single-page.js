@@ -38,7 +38,7 @@ function renderOktaWidget() {
         }
         else {
             var id_token = oktaSignIn.tokenManager.get(idTokenKey);
-            if (id_token == null) {
+            if (id_token) {
                 console.log('calling renewToken');
                 callRenewToken();
             }
@@ -181,15 +181,13 @@ function oktaSessionsMe(callBack) {
         },
         success: function (data) {
             console.log('setting success to true');
-            console.log("My session: ");
+            console.log('My session: ');
             console.log(data);
             sessionStorage.setItem(sessionTokenKey, JSON.stringify(data));
             return callBack(true);
-            //$('#logged-in-res').text(data);
         },
         error: function (textStatus, errorThrown) {
             console.log('setting success to false');
-            //$('#logged-in-res').text("You must be logged in to call this API");
             return callBack(false);
         },
         async: true
