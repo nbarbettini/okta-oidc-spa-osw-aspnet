@@ -38,7 +38,7 @@ function renderOktaWidget() {
         }
         else {
             var id_token = oktaSignIn.tokenManager.get(idTokenKey);
-            if (id_token) {
+            if (id_token == null) {
                 console.log('calling renewToken');
                 callRenewToken();
             }
